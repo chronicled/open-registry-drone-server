@@ -1,0 +1,32 @@
+{
+  "name": "@chronicled/open-registry-server",
+  "version": "0.0.0",
+  "description": "Server for the Open Registry SDK",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/eslint --ignore-path .gitignore ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chronicled/open-registry-server.git"
+  },
+  "keywords": [],
+  "author": "Chronicled Devs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chronicled/open-registry-server/issues"
+  },
+  "homepage": "https://github.com/chronicled/open-registry-server",
+  "devDependencies": {
+    "eslint": "2.13.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended"
+    ],
+    "rules": {
+      "semi": ["error", "always"],
+      "eol-last": 2
+    }
+  }
+}

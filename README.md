@@ -1,2 +1,2 @@
-# sc-tag-distribution
-All things related to customer-facing tag processes
+# Open Registry Sever
+Server for the Open Registry SDK

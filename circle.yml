@@ -1,0 +1,24 @@
+machine:
+  node:
+    version: 0.12.2
+
+test:
+  override:
+    - npm test
+
+dependencies:
+  pre:
+    - npm install -g npm-cli-login@0.0.10
+    - NPM_USER=$NPM_USERNAME NPM_PASS=$NPM_PASSWORD npm-cli-login
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - npm --no-git-tag-version version `git describe --abbrev=0`
+      - npm --no-git-tag-version version patch
+      - git config --global user.email $GIT_EMAIL
+      - git config --global user.name $GIT_USERNAME
+      - git tag -a v`node .bin/version.js` -m v`node .bin/version.js`
+      - npm publish
+      - git push --tags
