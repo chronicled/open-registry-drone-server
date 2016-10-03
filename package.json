@@ -4,6 +4,7 @@
   "description": "Server for the Open Registry SDK",
   "main": "index.js",
   "scripts": {
+    "start": "node ./server.js",
     "test": "./node_modules/.bin/eslint --ignore-path .gitignore ./"
   },
   "repository": {
@@ -24,9 +25,25 @@
     "extends": [
       "eslint:recommended"
     ],
+    "env": {
+      "node": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
     "rules": {
-      "semi": ["error", "always"],
+      "semi": [
+        "error",
+        "always"
+      ],
       "eol-last": 2
     }
+  },
+  "dependencies": {
+    "body-parser": "1.15.2",
+    "express": "4.14.0",
+    "forever": "0.15.2",
+    "morgan": "1.7.0"
   }
 }
