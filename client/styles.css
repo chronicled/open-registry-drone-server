@@ -1,0 +1,41 @@
+.body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.table {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.tableHeader {
+  height: 60px;
+  font-size: 50px;
+  font-weight: 700;
+  text-align: center;
+  width: 100%;
+  margin: 20px;
+}
+
+.entry {
+  width: 60%;
+  font-size: 30px;
+  font-weight: 400;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row nowrap;
+}
+
+.name {
+  margin: 15px;
+}
+
+.toggle {
+  margin: 15px;
+}
+
