@@ -1,7 +1,10 @@
 const Provider = require('open-registry-sdk');
 const _ = require('lodash');
+const Promise = require('bluebird');
 const Config = require('../config.json');
+const Registrants = require('../models/registrants.js');
 const Utils = require('../utils');
+
 const contracts = {
   registrarAddress: Config['registrarAddress'],
   registryAddress: Config['registryAddress']
@@ -14,18 +17,33 @@ module.exports = (app) => {
   app.route('/')
     .get((req, res) => res.send(require('../package.json')));
 
+  app.route('/registrants')
+    .get((req, res) => res.send(Registrants.getAll()))
+    .post((req, res) => {
+      const {registrantAddress, access} = req.body;
+      return Promise.try( () => Registrants.setAccess(registrantAddress, access))
+      .then(() => res.send(Registrants.getAll()))
+      .catch(() => res.status(400).send({reason: "Registrant does not exist"}));
+    });
+
+
   app.route('/requestChallenge')
     .post(parseIdentity, (req, res) => {
-      const { identity, parsedIdentity: {publicKey, protocol} } = req.body
+      const { identity, parsedIdentity: { protocol } } = req.body;
       return sdk.getThing(identity)
-      .then((thing) => {
-        const challenge = Utils.generateChallenge(protocol);
-        const fiveMinutes = 5*60*1000; //ms
-        recentChallenges[challenge] = true;
-        setTimeout(() => delete recentChallenges[challenge], fiveMinutes);
-        res.send({challenge , thing});
+      .then(thing => Registrants.checkAccess(thing.owner))
+      .then(hasAccess => {
+        if (hasAccess) {
+          const challenge = Utils.generateChallenge(protocol);
+          const fiveMinutes = 5*60*1000; //ms
+          recentChallenges[challenge] = true;
+          setTimeout(() => delete recentChallenges[challenge], fiveMinutes);
+          res.send({challenge});
+        } else {
+          res.status(403).send({reason: "Registrant does not have access rights"});
+        }
       })
-      .catch(() => res.status(400).send({reason: "Item could not be found"}));
+      .catch(err => res.status(400).send({reason: err.message}));
     });
 
   app.route('/verifyChallenge')
@@ -44,11 +62,10 @@ module.exports = (app) => {
     if (!valid) {
       res.status(400).send({reason: "Invalid URN format"});
     } else if (!isRecongizedProtocol) {
-      res.status(400).send({reason: "Public key protocol not supported"})
+      res.status(400).send({reason: "Public key protocol not supported"});
     } else {
       req.body.parsedIdentity = {valid, protocol, publicKey};
       next();
     }
   }
-
 };
