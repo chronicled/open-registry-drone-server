@@ -4,7 +4,7 @@
   "description": "Server for the Open Registry SDK",
   "main": "index.js",
   "scripts": {
-    "start": "node ./server.js",
+    "start": "node --harmony-destructuring ./server.js",
     "test": "./node_modules/.bin/eslint --ignore-path .gitignore ./"
   },
   "repository": {
@@ -41,9 +41,12 @@
     }
   },
   "dependencies": {
+    "bluebird": "3.4.6",
     "body-parser": "1.15.2",
     "express": "4.14.0",
     "forever": "0.15.2",
-    "morgan": "1.7.0"
+    "lodash": "4.16.3",
+    "morgan": "1.7.0",
+    "open-registry-sdk": "0.0.34"
   }
 }
