@@ -4,7 +4,7 @@
   "description": "Server for the Open Registry SDK",
   "main": "index.js",
   "scripts": {
-    "start": "node --harmony-destructuring ./server.js",
+    "start": "sudo node ./server.js",
     "test": "./node_modules/.bin/eslint --ignore-path .gitignore ./"
   },
   "repository": {
