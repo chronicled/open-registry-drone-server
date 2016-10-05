@@ -31,17 +31,19 @@ const generateChallenge = (protocol) => {
       return hash(crypto.randomBytes(256), 'sha256', 'hex');
     case protocols.PBK_RSA_2048:
       return PKCS1Pad(hash(crypto.randomBytes(256), 'sha256', 'hex'));
+    default:
+      return null;
   }
 };
 
 function parseURN(urn) {
   const urnChars = (urn || '').split('');
   const isNotColon = c => c !== ':';
-  const publicKey = _.takeRightWhile(urnChars, isNotColon).join('');
+  const value = _.takeRightWhile(urnChars, isNotColon).join('');
   const protocol = _.initial(_.dropRightWhile(urnChars, isNotColon)).join('');
-  const valid = (publicKey !== '' && protocol !== '');
+  const valid = (value !== '' && protocol !== '');
 
-  return valid ? {publicKey, protocol, valid} : {valid};
+  return valid ? {value, protocol, valid} : {valid};
 }
 
 module.exports = {protocols, generateChallenge, parseURN};

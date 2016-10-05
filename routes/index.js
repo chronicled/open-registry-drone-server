@@ -1,6 +1,8 @@
 const Provider = require('open-registry-sdk');
-const _ = require('lodash');
 const Promise = require('bluebird');
+const express = require('express');
+const _ = require('lodash');
+const path = require('path');
 const Config = require('../config.json');
 const Registrants = require('../models/registrants.js');
 const Utils = require('../utils');
@@ -17,6 +19,9 @@ module.exports = (app) => {
   app.route('/')
     .get((req, res) => res.send(require('../package.json')));
 
+  //serve client content
+  app.use('/settings', express.static(path.join(__dirname, '../client/www')));
+
   app.route('/registrants')
     .get((req, res) => res.send(Registrants.getAll()))
     .post((req, res) => {
@@ -29,21 +34,25 @@ module.exports = (app) => {
 
   app.route('/requestChallenge')
     .post(parseIdentity, (req, res) => {
-      const { identity, parsedIdentity: { protocol } } = req.body;
+      const { identity } = req.body;
       return sdk.getThing(identity)
-      .then(thing => Registrants.checkAccess(thing.owner))
-      .then(hasAccess => {
-        if (hasAccess) {
-          const challenge = Utils.generateChallenge(protocol);
+      .then(thing => Promise.props({hasAccess: Registrants.checkAccess(thing.owner), thing}))
+      .then( ({hasAccess, thing}) => {
+        const thingSupportsProtocol = (protocol) => thing.identities.some(urn => urn.includes(protocol));
+        const supportedProtocol = _.values(Utils.protocols).find(p => thingSupportsProtocol(p));
+        if (!hasAccess) {
+          res.status(403).send({reason: "Registrant does not have access rights"});
+        } else if (!supportedProtocol) {
+          res.status(400).send({reason: "Thing's public key protocol is not supported"});
+        } else {
+          const challenge = Utils.generateChallenge(supportedProtocol);
           const fiveMinutes = 5*60*1000; //ms
           recentChallenges[challenge] = true;
           setTimeout(() => delete recentChallenges[challenge], fiveMinutes);
           res.send({challenge});
-        } else {
-          res.status(403).send({reason: "Registrant does not have access rights"});
         }
       })
-      .catch(err => res.status(400).send({reason: err.message}));
+      .catch(err => res.status(400).send({reason: err.message || 'Thing could not be found'}));
     });
 
   app.route('/verifyChallenge')
@@ -57,14 +66,11 @@ module.exports = (app) => {
 
   function parseIdentity(req, res, next) {
     const { identity } = req.body;
-    const { valid, protocol, publicKey } = Utils.parseURN(identity); 
-    const isRecongizedProtocol = _.values(Utils.protocols).some(p => p === protocol);
+    const { valid, protocol, value } = Utils.parseURN(identity); 
     if (!valid) {
       res.status(400).send({reason: "Invalid URN format"});
-    } else if (!isRecongizedProtocol) {
-      res.status(400).send({reason: "Public key protocol not supported"});
     } else {
-      req.body.parsedIdentity = {valid, protocol, publicKey};
+      req.body.parsedIdentity = {valid, protocol, value};
       next();
     }
   }
