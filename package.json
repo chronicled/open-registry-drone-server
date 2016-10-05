@@ -4,7 +4,7 @@
   "description": "Server for the Open Registry SDK",
   "main": "index.js",
   "scripts": {
-    "start": "node ./server.js",
+    "start": "./node_modules/.bin/webpack -p && node ./server.js",
     "test": "./node_modules/.bin/eslint --ignore-path .gitignore ./"
   },
   "repository": {

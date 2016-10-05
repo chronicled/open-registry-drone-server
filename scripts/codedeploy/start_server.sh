@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 cd /srv/app
+../../node_modules/.bin/webpack
+/srv/app/node_modules/.bin/webpack -p
 
 rm -f ../shared/node_env
 echo "dev" >> ../shared/node_env

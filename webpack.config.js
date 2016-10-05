@@ -31,7 +31,8 @@ module.exports = {
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new CopyWebpackPlugin([
-      {from: './node_modules/react-toggle/style.css', to: 'toggle.css'}
+      {from: './node_modules/react-toggle/style.css', to: 'toggle.css'},
+      {from: './client/index.html', to: 'index.html'}
     ])
   ],
   postcss: [ autoprefixer({ remove: false, browsers: ['last 2 versions'] })]

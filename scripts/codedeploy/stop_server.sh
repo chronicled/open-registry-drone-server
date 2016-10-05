@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-~/.npm-packages/bin/forever stopall
+sudo ~/.npm-packages/bin/forever stopall
