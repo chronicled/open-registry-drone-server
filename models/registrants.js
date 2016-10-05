@@ -21,10 +21,12 @@ const registrants = {
   }
 };
 
-const setAccess = (address, access) => registrants[address].access = !!access; //throws
+const hasRegistrant = address => !!registrants[address];
 
-const checkAccess = address => registrants[address].access; //throws
+const checkAccess = address => hasRegistrant(address) && registrants[address].access;
+
+const setAccess = (address, access) => hasRegistrant(address) && (registrants[address].access = !!access);
 
 const getAll = () => registrants;
 
-module.exports = {setAccess, checkAccess, getAll};
+module.exports = {setAccess, checkAccess, getAll, hasRegistrant};

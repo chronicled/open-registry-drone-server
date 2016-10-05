@@ -2,6 +2,7 @@
   height: 100%;
   width: 100%;
   font-family: 'Montserrat', sans-serif;
+  color: #272727;
 }
 
 .table {
@@ -14,28 +15,30 @@
 }
 
 .tableHeader {
-  height: 60px;
-  font-size: 50px;
+  height: auto;
+  font-size: 40px;
   font-weight: 700;
   text-align: center;
   width: 100%;
   margin: 20px;
+  padding: 5px;
 }
 
 .entry {
-  width: 60%;
+  width: 90%;
   font-size: 30px;
   font-weight: 400;
   display: flex;
   justify-content: space-between;
   flex-flow: row nowrap;
+  align-items: center;
 }
 
 .name {
-  margin: 15px;
+  margin: 10px;
 }
 
 .toggle {
-  margin: 15px;
+  margin: 10px;
 }
 
