@@ -54,13 +54,15 @@ const signatureToAns1 = signature => {
 };
 
 
-const validateFields = (...fields) => {
+const validateFields = (requestSchema) => {
   return (req, res, next) => {
-    const missingFields = fields.filter(field => !(field in req.body));
-    if (missingFields.length === 0) {
-      next();
+    req.checkBody(requestSchema);
+    const errors = req.validationErrors();
+    if (errors) {
+      const invalids = errors.reduce((acc, err) => acc.add(err.param), new Set());
+      res.status(400).send({reason: `These field are invalid: ${Array.from(invalids)}`});
     } else {
-      res.status(400).send({reason: `The Following Fields are missing: ${missingFields.toString()}`});
+      next();
     }
   };
 };
@@ -70,7 +72,7 @@ const makeErrorCatcher = (req, res) => {
     if (typeof err === 'string') {
       res.status(400).send({reason: err});
     } else {
-      res.status(500).send({reason: "Internal Server Error"});
+      res.status(500).send({reason: 'Internal Server Error'});
     }
   };
 };
