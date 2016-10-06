@@ -22,7 +22,6 @@
  *       "reason": "Thing\'s public key protocol is not supported"
  *     }
  */
-const Promise = require('bluebird');
 const _ = require('lodash');
 const Registrants = require('../models/registrants.js');
 const Challenges = require('../models/challenges.js');
