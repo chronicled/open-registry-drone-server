@@ -1,3 +1,29 @@
+/**
+ * @api {post} /verifyChallenge 
+ * @apiName verifyChallenge
+ * @apiGroup Verify Challenge
+ * @apiDescription verify a challenge that has been signed by a Thing's public key
+ *
+ * @apiParam {String} identity The identifying URN for the thing that has been challenged
+ * @apiParam {String} challenge The challenge that was sent to the thing
+ * @apiParam {String} signature The string that resulted when the Thing signed the challenge
+ *
+ * @apiSuccess {Boolean} verified The result of testing the signature against the challenge for the Thing
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "verified" : true
+ *     }
+ *
+ * @apiError InvalidPublicKey The Thing's public key uses a protocol for signing that is not supported
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 400 Not Found
+ *     {
+ *       "reason": "Thing does not have a supported public key"
+ *     }
+ */
 const _ = require('lodash');
 const Challenges = require('../models/challenges.js');
 const Utils = require('../utils');

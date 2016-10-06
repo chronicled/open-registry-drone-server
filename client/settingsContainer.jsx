@@ -24,6 +24,7 @@ export default class SettingsContainer extends React.Component {
   handleToggleRegistrant(registrantAddress, access) {
     return () => {
       return axios.post('/registrants', {registrantAddress, access})
+      .then(() => axios.get('/registrants'))
       .then(resp => resp.data)
       .then(registrants => this.setState({registrants}))
       .catch(err => console.log(err));

@@ -1,3 +1,27 @@
+/**
+ * @api {post} /requestChallenge 
+ * @apiName requestChallenge
+ * @apiGroup Request Challenge
+ * @apiDescription Request a challenge based on a Thing's identity
+ *
+ * @apiParam {String} identity The identifying URN for the thing that will be challenged
+ *
+ * @apiSuccess {String} challenge The challenge based on the requested Thing's public key
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "challenge" : "8b2c583afdcea8f41e59a330181a72a8058490bc1c9cbf3455d632de3db0b1b1"
+ *     }
+ *
+ * @apiError InvalidProtocol The Thing's public key uses a protocol that is not supported for challenging
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 400 Not Found
+ *     {
+ *       "reason": "Thing\'s public key protocol is not supported"
+ *     }
+ */
 const Promise = require('bluebird');
 const _ = require('lodash');
 const Registrants = require('../models/registrants.js');
@@ -18,8 +42,8 @@ module.exports = (app, sdk) => {
       const { identity } = req.body;
 
       return sdk.getThing(identity)
-      .then(thing => Promise.props({hasAccess: Registrants.checkAccess(thing.owner), thing}))
-      .then( ({hasAccess, thing}) => {
+      .then(thing => {
+        const hasAccess = Registrants.checkAccess(thing.owner);
         const serverProtocols = _.values(Utils.protocols);
         const isProtocolInThing = (protocol) => thing.identities.some(urn => urn.includes(protocol));
         const supportedProtocol = serverProtocols.find(isProtocolInThing);

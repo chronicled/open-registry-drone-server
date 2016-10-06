@@ -15,7 +15,8 @@ module.exports = (app) => {
     }
   }));
 
-  //Only allow requests which have our specific access token
+  //filters requests that do not have an authorization token for specific
+  //access points
   app.use((req, res, next) => {
     const token = req.headers.authorization;
     const isVerified = token && (token === `Bearer ${Config["token"]}`);
