@@ -8,16 +8,16 @@ const registrants = {
     name: "Chronicled Community",
     access: true
   },
+  "0xc16fdf87ea9999851cf14531c209191ce32599ee": {
+    name: "Shoe Surgeon",
+    access: false
+  },
   "0x0000000000000000000000000000000000000001": {
     name: "Amazon",
     access: false
   },
   "0x0000000000000000000000000000000000000002": {
     name: "Dominos",
-    access: false
-  },
-  "0x0000000000000000000000000000000000000003": {
-    name:"7Eleven",
     access: false
   },
   "0x0000000000000000000000000000000000000004": {
