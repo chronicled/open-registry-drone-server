@@ -2,11 +2,24 @@
 Server for the Open Registry SDK
 
 # Description
-This example Express app showcases the ease of use with which the [Open-Registry-SDK](https://github.com/chronicled/open-registry-sdk) can be combined into existing applications to provide direct blockchain integration. In this app, we instantiate the SDK within the index file and inject it into the server. This then allows the app to lookup Things which we have previously regeristered through Ethereum (provided that we supply an identifying URN for the specific Thing) and verify their identity. In this application, we utilize this functionality in two main endpoints:`requestChallenge` and `verifyChallenge`.
+This example Express app showcases the ease of use with which the [Open-Registry-SDK](https://github.com/chronicled/open-registry-sdk) can be combined into existing applications to provide direct blockchain integration, allowing a developer to look up Things which have been previously registered through Ethereum and verify their identity. This way of conducting identity validation has a wide range of potential applications but in this app we use it to demonstrate machine access control for drones tagged with a BLE chip registered through the Open-Registry-SDK under a specific owner.
 
-In the `requestChallenge` endpoint, a client supplies an identifying URN for an already registered Thing and the server will lookup the object's public key by using the Open-Registry-SDK. If a public key exists and it supports a challenge protocol which is specified in the `Utils` module, then the server generates a challenge and sends it back to the client. The client must then sign the challenge and send it back to the `verifyEndpoint` within a 5 minute time window. If the client does so, the server will again use the Open-Registry-SDK to verify that the signature that was returned is valid and responds to the client with the outcome of the test.
+## Scenario
+An increasingly automated world provides myriad exciting opportunities but not without new, unique challenges. Without human delivery drivers how does one know that a trusted party is trying to gain access to their home? This server supports a "smart gate" which can read a BLE tag (attached to a delivery drone), determine the identity from the chip and request the server to conduct the identity validation steps outlined below. If the drone passes validation the gate would open, allowing the drone to deliver it's payload. If not valid or the owner was not granted access, the gate would remain closed.
 
-This way of conducting identity validation has a wide range of potential applications. In this app, we used it to demonstrate an example of machine access control with drones. Each drone was tagged with a BLE chip which had been registered through the Open-Registry-SDK under a specific owner. This server then logs in memory the list of these drone owners under the `Registrants` model, whose access can be toggled on or off via manual requests to the `/registrants` endpoints or configured graphically on the settings page delivered through the `/setttings` endpoint. When a drone approaches a gate that can read the broadcasted BLE tag, it reads the identity from the chip and requests the server to conduct the identity validation steps outlined in the previous paragraph. If the drone passes validation, the gate would open for it. If it did not or the drone owner was not granted access, the gate would remain closed.
+In addition to Open-Registry-SDK usage the server provides a number of features illustrative of real-world use:
+- stores the list of known drone owners (via the `Registrants` model)
+- allows drone access to be toggled on or off (over HTTP via the `/registrants` endpoint or graphically on the settings page delivered through `/setttings`)
+
+# Open-Registry-SDK Usage
+This application primarily uses two features of the Open-Registry-SDK in two main endpoints:`requestChallenge` and `verifyChallenge`.
+
+## Request Challenge
+A client supplies an identifying URN for an already registered Thing and the server will look up the object's public key by using the Open-Registry-SDK. If a public key exists and it supports a common challenge protocol with the server, then the server generates a challenge and sends it back to the client. 
+
+## Verify Challenge
+The client must then sign the challenge and send it back to the `verifyChallenge` endpoint. If the client does so, the server will again use the Open-Registry-SDK to verify that the signature that was returned is valid and responds to the client with the outcome of the test.
+
 
 # API Endpoints
 * [Registrants](#api_registrants)
@@ -116,7 +129,7 @@ HTTP/1.1 404 Not Found
 <a name="api_requestChallenge/post"></a>
 ## 
 
-<p>Request a challenge based on a Thing's identity</p>
+<p>Request a challenge based on a Thing's identity, to verify return it to the [verifyChallenge](#api_verifyChallenge) route within a 5 minute time window.</p>
 
 	POST /requestChallenge
 
