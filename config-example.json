@@ -1,0 +1,7 @@
+{
+  "port": 3000,
+  "token": "",
+  "registrarAddress": "0xb98fdd97f3da105e6b166461afac208981bc786b",
+  "registryAddress": "0x07315477a3f2887eeb4a1b6ac61e34850755d1ae",
+  "rpcUrl": "https://node.ambisafe.co"
+}
