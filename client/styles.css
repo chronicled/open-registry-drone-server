@@ -1,8 +1,6 @@
 .body {
   height: 100%;
   width: 100%;
-  font-family: 'Montserrat', sans-serif;
-  color: #272727;
 }
 
 .table {
@@ -16,22 +14,22 @@
 
 .tableHeader {
   height: auto;
-  font-size: 40px;
-  font-weight: 700;
   text-align: center;
   width: 100%;
   margin: 20px;
   padding: 5px;
+  font: 300 2em Roboto, Sans-serif;
+  color: #656565;
 }
 
 .entry {
   width: 90%;
-  font-size: 30px;
-  font-weight: 400;
   display: flex;
   justify-content: space-between;
   flex-flow: row nowrap;
   align-items: center;
+  font: 300 1.5em Roboto, Sans-serif;
+  color: #555;
 }
 
 .name {

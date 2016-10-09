@@ -1,5 +1,5 @@
-# Open Registry Sever
-Server for the Open Registry SDK
+# Open Registry Drone Server
+Server that acts as a Drone gate using the Open Registry SDK
 
 # Description
 This example Express app showcases the ease of use with which the [Open-Registry-SDK](https://github.com/chronicled/open-registry-sdk) can be combined into existing applications to provide direct blockchain integration, allowing a developer to look up Things which have been previously registered through Ethereum and verify their identity. This way of conducting identity validation has a wide range of potential applications but in this app we use it to demonstrate machine access control for drones tagged with a BLE chip registered through the Open-Registry-SDK under a specific owner.
