@@ -57,9 +57,12 @@ module.exports = (app, sdk) => {
       .then(urns => urns.find(isSupportedPublicKey))
       .then(publicKey => {
         if (publicKey) {
+          //Signature is verified using the SDK and then sent back as true provided the challenge 
+          //was created within the past 5 minutes
           const verified = sdk.verifyIdentity(publicKey, challenge, Utils.signatureToAns1(signature));
           res.send({verified: verified && isRecentChallenge});
         } else {
+          //if lookup results in Thing with no public key for challenging, we send a 400 error message
           res.status(400).send({reason: 'Thing does not have supported public key'});
         }
       })

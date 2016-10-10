@@ -68,9 +68,12 @@ module.exports = (app) => {
       const {registrantAddress, access} = req.body;
       const registrantExists = Registrants.hasRegistrant(registrantAddress);
       if (registrantExists) {
+        //Set Registrant's access (Boolean) and then send back a 200 response
         Registrants.setAccess(registrantAddress, access);
         res.send({modified: 1});
       } else {
+        //Send back a 400 message if the client tried to change access to a
+        //Registrant that does not exist in memory
         res.status(400).send({reason: 'Registrant does not exist'});
       }
     });

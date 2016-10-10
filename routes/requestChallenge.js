@@ -48,10 +48,14 @@ module.exports = (app, sdk) => {
         const supportedProtocol = serverProtocols.find(isProtocolInThing);
         const challenge = Utils.generateChallenge(supportedProtocol);
         if (!hasAccess) {
+          //If the Thing's registrant does not have access rights, we send a 403 error
+          //instead of initiating the challenge process
           res.status(403).send({reason: 'Registrant does not have access rights'});
         } else if (!supportedProtocol) {
+          //If the Thing does not have a supported Challenge protocol, we send a 400 message
           res.status(400).send({reason: 'Thing\'s public key protocol is not supported'});
         } else {
+          //challenge is added to memory for 5 minutes and then sent back to client
           Challenges.add(challenge);
           res.send({challenge});
         }
